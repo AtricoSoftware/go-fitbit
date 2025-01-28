@@ -3,7 +3,6 @@ package fitbit
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -245,7 +244,7 @@ func (m *Session) makeRequest(url string) ([]byte, error) {
 	// This will catch errors such as request quota exceeded
 	var cError contentError
 	if err = json.Unmarshal(contents, &cError); err == nil && cError.Error.Code != 0 {
-		return contents, errors.New(fmt.Sprintf("Error: %d, %s, %s", cError.Error.Code, cError.Error.Message, cError.Error.Status))
+		return contents, fmt.Errorf(fmt.Sprintf("Error: %d, %s, %s", cError.Error.Code, cError.Error.Message, cError.Error.Status))
 	}
 
 	return contents, nil
